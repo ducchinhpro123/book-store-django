@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Search results for {{ q }}
+{% endblock title %}
+
+
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <p style="font-size: 30px" class="text-center text-{{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+
+    {% endif %}
+    <div class='container'>
+        <ul>
+            {% for book in books %}
+                <li class='text-start '>
+                    <a href="{% url 'book:detail-view' book.slug %}">{{ book.title }} - {{ book.author.all|join:", " }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock content %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+    {{ author.name }}
+{% endblock title %}
+
+{% block content %}
+
+    <div class="container d-flex flex-column flex-sm-column flex-md-column flex-lg-row mt-5 ">
+        <div class="col-11 col-lg-3 col-xl-4 d-xl-flex justify-content-xl-center" style="margin-right: 30px;">
+            <img class="img-thumbnail" src="{{ author.img_profile.url }}" alt="{{ author.name }}"/></div>
+        <div class="col">
+            <p style="font-size: 31px;" class='text-start'><strong>{{ author.name }}</strong></p>
+            <hr/>
+            <div class="justify-content-xl-start">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr></tr>
+                        </thead>
+                        <tbody>
+                        <tr class='text-start'>
+                            <td style="border-style: none;padding-left: 0px;"><strong>Born</strong></td>
+                            <td style="border-style: none;">{{ author.year_of_birth }}</td>
+                        </tr>
+                        <tr class='text-start'>
+                            <td style="border-style: none;padding-left: 0px;"><strong>Died</strong></td>
+                            <td style="border-style: none;">
+                                {% if author.year_of_death %}
+                                    {{ author.year_of_death }}
+                                {% else %}
+                                    ---
+                                {% endif %}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <p class='text-start'>
+                {{ author.bio }}
+            </p>
+        </div>
+    </div>
+    <hr>
+
+{% endblock content %}

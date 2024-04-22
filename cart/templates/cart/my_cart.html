@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Your cart
+{% endblock %}
+
+{% block content %}
+
+
+
+    <h1 class="w-50 text-black text-center mt-5">Your cart ({{ cart.cartbook_set.count }})</h1>
+    <hr>
+    <div class="container d-flex flex-column flex-xl-row " style="margin-top: 51px;">
+        <div class="col-sm-21 col-xxl-8" style="min-width: 800px;">
+            <div class="container">
+                <div class="row" style="min-width: 800px;">
+                    <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1"></div>
+                    <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2"></div>
+                    <div class="col-3 col-sm-3 col-md-3 col-lg-3">
+                        <p class="text-start">Product</p>
+                    </div>
+                    <div class="col-2 col-sm-2 col-md-2 col-lg-2">
+                        <p class="text-start">Price</p>
+                    </div>
+                    <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                        <p class="text-start">Quantity</p>
+                    </div>
+                    <div class="col-2 col-sm-2 col-md-2 col-lg-2">
+                        <p class="text-start">Subtotal</p>
+                    </div>
+                </div>
+                <hr style="min-width: 800px;">
+                {% for cartitem in cart.cartbook_set.all %}
+
+                    <div class="row" style="min-width: 800px;">
+
+
+                        <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1 d-sm-flex d-xl-flex justify-content-sm-center align-items-sm-center justify-content-xl-end align-items-xl-center">
+                            <form method="post" action="{% url 'cart:remove_from_cart' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="book_id" value="{{ cartitem.book.id }}">
+                                <button type="submit">
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
+                                         viewBox="0 0 16 16" class="bi bi-x">
+                                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"></path>
+                                    </svg>
+                                </button>
+
+                            </form>
+
+                        </div>
+                        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2"><img class="img-thumbnail"
+                                                                                    alt="{{ cartitem.book.title }}"
+                                                                                    src="{{ cartitem.book.image.url }}">
+                        </div>
+                        <div class="col-3 col-sm-3 col-md-3 col-lg-3 d-xl-flex flex-column justify-content-xl-center align-items-xl-start">
+                            <p class="text-start"><strong>{{ cartitem.book.title }}</strong></p>
+                            <p class="text-start"><strong>Vendor:</strong>&nbsp;<span
+                                    class="text-black-50">Arlene</span>&nbsp;</p>
+                            <p class="text-black-50 text-start">Available on backorder</p>
+                        </div>
+                        <div class="col-2 col-sm-2 col-md-2 col-lg-2 d-lg-flex d-xl-flex align-items-lg-center align-items-xl-center">
+                            <small class="text-black-50">${{ cartitem.book.price }} </small>
+                        </div>
+                        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 d-lg-flex d-xl-flex align-items-lg-center align-items-xl-center">
+                            <input type="number" value="{{ cartitem.quantity }}" style="width: 100%;"
+                                   data-book-id="{{ cartitem.book.id }}"
+                                   id="quantity-input-{{ cartitem.book.id }}" onchange="updateQuantity(this)">
+                        </div>
+                        <div class="col-2 col-sm-2 col-md-2 col-lg-2 d-lg-flex d-xl-flex align-items-lg-center align-items-xl-center">
+                            <small class="text-black-50">$502.00 </small>
+                        </div>
+                    </div>
+                    <hr style="min-width: 800px;">
+                {% endfor %}
+
+            </div>
+        </div>
+        <div class="col-md-5 col-lg-4 col-xl-3 col-xxl-3">
+            <div class="container"
+                 style="padding-bottom: 15px;border-radius: 12px;border: 0.5px solid var(--bs-tertiary-color) ;">
+                <div class="row">
+                    <div class="col">
+                        <p style="font-size: 32px;font-weight: bold;">Cart totals</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col d-sm-flex d-md-flex d-lg-flex d-xl-flex justify-content-between align-items-sm-center align-items-md-center align-items-lg-center align-items-xl-center">
+                        <p>Subtotal</p>
+                        <p>${{ total }}</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col d-sm-flex d-md-flex d-lg-flex d-xl-flex justify-content-between align-items-sm-center align-items-md-center align-items-lg-center align-items-xl-center">
+                        <p>Total</p>
+                        <p style="font-size: 23px;"><strong>${{ total }}</strong></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col d-xl-flex justify-content-xl-center">
+                        <a class="btn btn-primary" href="{% url 'order:create_order' %}"
+                           style="width: 100%;background: var(--bs-form-invalid-border-color);border-radius: 26px;border-style: none;">
+                            Proceed to checkout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        function updateQuantity(input) {
+            let bookId = input.getAttribute('data-book-id')
+            let newQuantity = input.value
+            let baseUrl = "{% url 'cart:update_quantity' book_id=0 %}".slice(0, -1)
+
+            {#fetch(`http://127.0.0.1:8000/cart/update_quantity/${bookId}/`, {#}
+            fetch(`${baseUrl}${bookId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf }}'
+                },
+                body: JSON.stringify({
+                    'quantity': newQuantity
+                })
+            }).then(function (response) {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok')
+                }
+                return response.json()
+            }).then(function (data) {
+                console.log('Success:', data)
+            }).catch(function (error) {
+                console.log('Error', error)
+            })
+
+        }
+    </script>
+
+{% endblock %}

@@ -1,0 +1,158 @@
+{% load static %}
+{% load shops_tag %}
+
+<section class="d-flex flex-column flex-sm-column flex-md-column flex-lg-column flex-xl-row align-items-xl-center">
+    <div class="col-xl-8 col-xxl-8 mx-auto" style="padding-right: 10px;">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-11 col-xl-8 d-sm-flex d-lg-flex d-xl-flex justify-content-sm-center align-items-sm-center align-items-lg-center align-items-xl-center">
+                <p style="font-weight: bold;font-size: 30px;margin-right: 15px;">Deals of the week</p>
+                <div id="wrapper"
+                     style="padding: 0px;padding-left: 0px;padding-right: 0px;padding-top: 0px;padding-bottom: 0px;margin: 0px;margin-bottom: 16px;margin-top: 16px;">
+                    <div class="container" style="padding-left: 0px;padding-right: 0px;">
+                        <div id="clockdiv">
+                            <div class="clock-wrapper"><span class="days"> </span>
+                                <div class="smalltext">
+                                    <p>Days </p>
+                                </div>
+                            </div>
+                            <div class="clock-wrapper"><span class="hours"> </span>
+                                <div class="smalltext">
+                                    <p>Hours </p>
+                                </div>
+                            </div>
+                            <div class="clock-wrapper"><span class="minutes"> </span>
+                                <div class="smalltext">
+                                    <p>Minutes </p>
+                                </div>
+                            </div>
+                            <div class="clock-wrapper"><span class="seconds"> </span>
+                                <div class="smalltext">
+                                    <p>Seconds </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row"
+             style="padding-top: 14px;padding-bottom: 14px;padding-left: 28px;padding-right: 28px;margin-left: 17px;border-radius: 13px;border-style: solid; border-width: 1px;border-color: var(--bs-red);">
+            {% for book in books %}
+
+                <div class="col-lg-6 col-xl-6 flex-column justify-content-evenly flex-sm-row flex-md-row"
+                     style="padding-top: 14px;padding-bottom: 14px;padding-left: 29px;padding-right: 29px;">
+                    <div class="row">
+                        <div class="col-md-4 col-xl-5"><img class="img-thumbnail" src="{{ book.image.url }}"
+                                                            alt="{{ book.title }}"
+                                                            style="border-radius: 17px;width: 100%;object-fit: contain;height: 100%;"/>
+                        </div>
+                        <div class="col">
+                            <a class="text-decoration-none text-black" style="font-size: 20px;"
+                               href="{% url 'book:detail-view' book.slug %}"><strong>{{ book.title }}</strong></a>
+                            <div>
+                                {% for i in "12345"|make_list %}
+                                    {% if i|add:0 <= book.get_avg_rating %}
+                                        <!-- Filled star -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                             fill="currentColor"
+                                             viewBox="0 0 16 16" class="bi bi-star-fill"
+                                             style="color: var(--bs-yellow);">
+                                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+                                        </svg>
+                                    {% else %}
+                                        <!-- Empty star -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                             fill="currentColor"
+                                             viewBox="0 0 16 16" class="bi bi-star">
+                                            <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.329-.314.158-.888-.283-.95l-4.898-.696L8.465.792c-.197-.39-.73-.39-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.522 3.356-.83 4.73zm4.905-2.767l-3.686 1.894.694-3.957-2.83-2.68 3.924-.57L7.77 1.71l1.76 3.717 3.924.57-2.83 2.68.694 3.957-3.686-1.894z"></path>
+                                        </svg>
+
+                                    {% endif %}
+                                {% endfor %}
+                                <span style="margin-left: 10px"> ({{ book.reviews.count }})</span>
+                            </div>
+                            <p>
+                                {% for author in book.author.all %}
+                                    {{ author }}
+                                {% endfor %}
+
+                            </p>
+                            <p style="margin-bottom: 25px;"><span
+                                    style="color: rgb(248, 112, 14);">${{ book.price }}</span><span
+                                    class="text-muted" style="margin-left: 10px;"><span
+                                    style="text-decoration: line-through;">$86.99</span></span></p>
+                            <p style="margin-bottom: 3px;"><span
+                                    style="color: rgba(33, 37, 41, 0.68);">Already sold:</span> {{ book.sold_quantity }}/{{ book.total_sold }}
+
+                            </p>
+                            <div class="progress">
+                                <div class="progress-bar" aria-valuenow="{{ book.sold_quantity }}" aria-valuemin="0"
+                                     aria-valuemax="{{ book.stock }}"
+                                     style="width: {{ book.percentage_sold }}%;">{{ book.percentage_sold }}%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+    <div class="col-lg-4 col-xl-3" style="padding-left: 20px;padding-right: 20px;">
+        <div class="row">
+            <div class="col">
+                <p style="font-weight: bold;font-size: 24px;">Top selling vendor</p>
+            </div>
+        </div>
+        {% get_sellers as sellers %}
+        {% for seller in sellers %}
+            <div class="row">
+                <div class="col-lg-4 col-xl-3">
+                    <img src="{{ seller.banner.url }}" class="img-thumbnail"
+                         style="border-radius: 8px;"/>
+                </div>
+                <div class="col d-xl-flex flex-column justify-content-xl-center align-items-xl-start">
+                    <a class="text-decoration-none" href="{% url 'customer:shop' seller.shop_name %}"
+                       style="margin-bottom: 0px;"><strong> {{ seller.shop_name }}<span
+                            style="color: rgba(33, 37, 41, 0.81);"> </span></strong><span
+                            style="color: rgba(33, 37, 41, 0.81);">({{ seller.get_total_products }} Products)</span></a>
+                    <div>
+                        {% for i in "12345"|make_list %}
+                            {% if i|add:0 <= seller.rating %}
+                                <!-- Filled star -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                     fill="currentColor"
+                                     viewBox="0 0 16 16" class="bi bi-star-fill"
+                                     style="color: var(--bs-yellow);">
+                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+                                </svg>
+                            {% else %}
+                                <!-- Empty star -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                     fill="currentColor"
+                                     viewBox="0 0 16 16" class="bi bi-star">
+                                    <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.329-.314.158-.888-.283-.95l-4.898-.696L8.465.792c-.197-.39-.73-.39-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.522 3.356-.83 4.73zm4.905-2.767l-3.686 1.894.694-3.957-2.83-2.68 3.924-.57L7.77 1.71l1.76 3.717 3.924.57-2.83 2.68.694 3.957-3.686-1.894z"></path>
+                                </svg>
+
+                            {% endif %}
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+            <hr/>
+        {% endfor %}
+
+    </div>
+    <style>
+        a {
+            transition: color 0.5s ease, text-decoration 0.5s ease;
+        }
+
+        a:hover {
+            color: #F65C4E;
+            text-decoration: underline;
+        }
+    </style>
+</section>

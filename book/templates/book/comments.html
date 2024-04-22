@@ -1,0 +1,143 @@
+<div class="row">
+            <div class="col-xl-11 mx-auto">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Community Reviews</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            {% for review in book.reviews.all %}
+
+
+                                <li class="list-group-item" style="margin-bottom: 6px;">
+                                    <div class="d-flex media">
+                                        <div></div>
+                                        <div class="media-body">
+                                            <div class="d-flex media" style="overflow: visible;">
+                                                <div>
+                                                    {% if review.user.customer.img_profile %}
+
+                                                    <img class="me-3" style="width: 25px;height: 25px;"
+                                                         src="{{ review.user.customer.img_profile.url }}"
+                                                         alt="{{ review.user.username }}"/>
+                                                    {% else %}
+                                                        <img class="me-3" style="width: 25px;height: 25px;"
+                                                             src="https://i.imgur.com/d2dKtI7.png"
+                                                             alt="{{ review.user.username }}"/>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="media-body" style="overflow: visible;">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                <span
+                                                                        class="d-xl-flex align-items-xl-center"
+                                                                        style="margin-right: 0px;">
+                                                                    {% for i in "12345"|make_list %}
+                                                                        {% if i|add:0 <= review.rating %}
+                                                                            <!-- Filled star -->
+                                                                            <svg
+                                                                                    class="bi bi-star-fill"
+                                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                                    width="1em"
+                                                                                    height="1em" fill="currentColor"
+                                                                                    viewBox="0 0 16 16"
+                                                                                    style="color: var(--bs-yellow);font-size: 13px;">
+                                                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+                                                                </svg>  
+                                                                        {% else %}
+                                                                            <!-- Empty star -->
+                                                                            <svg class="bi bi-star"
+                                                                                 xmlns="http://www.w3.org/2000/svg"
+                                                                                 width="1em" height="1em"
+                                                                                 fill="currentColor"
+                                                                                 viewBox="0 0 16 16"
+                                                                                 style="font-size: 13px;">
+                                                                    <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"></path>
+                                                                </svg>
+
+                                                                        {% endif %}
+                                                                    {% endfor %}
+
+
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col d-xl-flex justify-content-start align-items-xl-center">
+                                                                    <a class="text-decoration-none" href="#"
+                                                                       style="margin-right: 21px; margin-top: 4px"><strong><span
+                                                                            style="color: rgb(0, 0, 0);">{{ review.user.username }}</span></strong></a><small
+                                                                        class="text-muted">{{ review.date }}</small>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <p class="small"
+                                                                       style="text-align: left;margin-top: 10px;">
+                                                                        <span style="color: rgb(68, 68, 68);">{{ review.review }}</span>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+
+
+                        </ul>
+                        <button class="btn btn-light" data-toggle="modal" data-target="#form"
+                                style="margin-left: 601px;margin-top: -9px;" type="button">Add
+                            Comment
+                        </button>
+
+                        {#      MODAL    #}
+
+                        <div class="modal fade" id="form" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="text-right cross"><i class="fa fa-times mr-2"></i></div>
+                                    <div class="card-body text-center">
+                                        <img src=" https://i.imgur.com/d2dKtI7.png"
+                                             height="100" width="100">
+                                        <form class="comment-box text-center" method="post" action="{% url 'book:add-review' book.slug %}">
+                                            <h4>Add a comment</h4>
+                                            {% csrf_token %}
+                                            <div class="rating"><input type="radio" name="rating" value="5"
+                                                                       id="5"><label for="5">☆</label> <input
+                                                    type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
+                                                <input type="radio" name="rating" value="3" id="3"><label
+                                                        for="3">☆</label> <input type="radio" name="rating" value="2"
+                                                                                 id="2"><label for="2">☆</label> <input
+                                                        type="radio" name="rating" value="1" id="1"><label
+                                                        for="1">☆</label></div>
+                                            <div class="comment-area">
+                                                <label>
+                                                    <textarea name="review"
+                                                            class="form-control"
+                                                              placeholder="what is your view?"
+                                                              rows="4">
+
+                                                    </textarea>
+                                                </label></div>
+
+                                            <div class="text-center mt-4">
+                                                <button class="btn btn-success send px-5" type="submit">Comment<i
+                                                        class="fa fa-long-arrow-right ml-1"></i></button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>

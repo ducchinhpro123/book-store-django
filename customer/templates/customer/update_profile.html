@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block title %}
+    Update Profile
+{% endblock %}
+
+{% block content %}
+
+    <!-- for messages -->
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close btn-close" data-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+
+
+
+    <div class="container mt-5 text-start">
+        <h1 class="text-black mt-5 text-center">Form update profile</h1>
+        <hr>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.media }}
+            {% for field in form %}
+                <div class="">
+                    <div><label for="{{ field.id_for_label }}" class="text-dark">{{ field.label }}: </label></div>
+                    {{ field }}
+                </div>
+                {% if field.errors %}
+                    <div class="alert alert-danger">
+                        {{ field.errors }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <input type="submit" class="btn btn-info mt-2" value="Update"/>
+        </form>
+    </div>
+
+    <hr>
+
+
+{% endblock %}

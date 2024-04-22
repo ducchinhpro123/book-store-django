@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Publisher Form
+{% endblock %}
+
+{% block content %}
+    <h1 class="text-center mt-5">Create Publisher</h1>
+    <div class="container mt-5">
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    <div><label for="{{ field.id_for_label }}" class="text-dark">{{ field.label }}: </label></div>
+                    {{ field }}
+                </div>
+            {% endfor %}
+            <div class="row justify-content-center">
+                <input type="submit" class="btn btn-info btn-lg" value="Create"/>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

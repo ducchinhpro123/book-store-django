@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+    Order
+{% endblock title %}
+
+{% block link %}
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock link %}
+
+{% block content %}
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Assistant');
+
+
+        .cell-1 {
+            border-collapse: separate;
+            border-spacing: 0 4em;
+            background: #fff;
+            border-bottom: 5px solid transparent;
+            /*background-color: gold;*/
+            background-clip: padding-box;
+        }
+
+        thead {
+            background: #dddcdc;
+        }
+
+        .toggle-btn {
+            width: 40px;
+            height: 21px;
+            background: grey;
+            border-radius: 50px;
+            padding: 3px;
+            cursor: pointer;
+            -webkit-transition: all 0.3s 0.1s ease-in-out;
+            -moz-transition: all 0.3s 0.1s ease-in-out;
+            -o-transition: all 0.3s 0.1s ease-in-out;
+            transition: all 0.3s 0.1s ease-in-out;
+        }
+
+        .toggle-btn > .inner-circle {
+            width: 15px;
+            height: 15px;
+            background: #fff;
+            border-radius: 50%;
+            -webkit-transition: all 0.3s 0.1s ease-in-out;
+            -moz-transition: all 0.3s 0.1s ease-in-out;
+            -o-transition: all 0.3s 0.1s ease-in-out;
+            transition: all 0.3s 0.1s ease-in-out;
+        }
+
+        .toggle-btn.active {
+            background: blue !important;
+        }
+
+        .toggle-btn.active > .inner-circle {
+            margin-left: 19px;
+        }
+    </style>
+
+    <div class="container mt-5">
+
+        <div class="row">
+            <div class="col-sm-3 col-md-2 col-lg-2 col-xl-2 text-start">
+                <hr/>
+                <a href="{% url 'index:index' %}">Dashboard</a>
+                <hr/>
+                <a href="{% url 'order:history_order' %}">Orders</a>
+                <hr/>
+                <a href="#">Addresses</a>
+                <hr/>
+                <a href="{% url 'wishlist:my-wishlist' %}">Wishlist</a>
+                <hr/>
+                <a href="#">Logout</a>
+                <hr/>
+            </div>
+            <div class="col text-start">
+
+                <div class="container mt-5 border border-dark">
+                    <div class="d-flex justify-content-center row">
+                        <div class="col-md-10">
+                            <div class="rounded">
+                                <div class="table-responsive table-borderless">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+
+                                            <th>Order #</th>
+                                            <th>Company name</th>
+                                            <th>status</th>
+                                            <th>Total</th>
+                                            <th>Created</th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="table-body">
+                                        {% for order in orders %}
+
+                                            <tr class="cell-1">
+
+                                                <td><a href="{% url 'order:order_detail' order.id %}">{{ order.id }}</a>
+                                                </td>
+                                                <td>
+                                                    {% for book in order.books.all %}
+                                                        <a class="text-decoration-none " href="{% url 'customer:shop' book.seller.shop_name %}">{{ book.seller.shop_name }}, </a>
+                                                    {% endfor %}
+
+                                                </td>
+                                                <td><span class="badge badge-success">Fullfilled</span></td>
+                                                <td>${{ order.total }}</td>
+                                                <td>{{ order.date }}</td>
+                                                <td><i class="fa fa-ellipsis-h text-black-50"></i></td>
+                                            </tr>
+                                        {% endfor %}
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $('.toggle-btn').click(function () {
+                $(this).toggleClass('active').siblings().removeClass('active');
+            });
+
+        });
+    </script>
+
+{% endblock content %}
+
+{% block link-scripts %}
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+
+
+{% endblock link-scripts %}

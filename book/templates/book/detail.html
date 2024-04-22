@@ -1,0 +1,276 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load book_tags %}
+
+{% block title %}
+    {{ book.title }}
+{% endblock %}
+
+
+{% block content %}
+    {% block link %}
+        <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/css/countdown-timer-styles.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/css/countdown-timer.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/css/content-styles.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'book/star-rating.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'book/Community-ChatComments.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'book/comment-modal.css' %}" type="text/css">
+        {#        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">#}
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="{% static 'django_ckeditor_5/dist/styles.css' %}" type="text/css" media="all" rel="stylesheet">
+        <script src="{% static 'django_ckeditor_5/dist/bundle.js' %}"></script>
+    {% endblock %}
+
+    {% for message in messages %}
+        <h3 class="text-warning text-center">{{ message }}</h3>
+    {% endfor %}
+    <div class="container d-flex flex-column flex-sm-column flex-md-column flex-lg-column flex-xl-row" title="Title">
+        <div class="col-md-10 col-lg-8 col-xl-5 mx-auto" style="padding: 10px;">
+            <img class="img-thumbnail" alt="{{ book.title }}"
+                 src="{{ book.image.url }}"
+                 style="padding: 20px; width: 100%; height: auto">
+        </div>
+        <div class="col-md-10 col-lg-8 col-xl-7 mx-auto" style="padding: 20px;">
+            <div class="row">
+                <div class="col d-flex justify-content-between align-items-center"><span
+                        style="color: var(--bs-success);background: rgba(25,135,84,0.26);border-radius: 10px;padding-right: 10px;padding-left: 9px;">In Stock</span>
+                    <div class="btn-group" role="group">
+                        {% get_prev_book_slug book.id as prev_book_slug %}
+                        {% if prev_book_slug == '' %}
+                        {% else %}
+                            <a class="btn btn-primary d-xl-flex align-items-xl-center" type="button"
+                               style="margin-right: 5px;background: var(--bs-border-color-translucent);border-style: none;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
+                                     viewBox="0 0 16 16" class="bi bi-arrow-left">
+                                    <path fill-rule="evenodd"
+                                          d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"></path>
+                                </svg>
+                                Prev
+                            </a>
+                        {% endif %}
+
+
+                        {% get_next_book_slug book.id as next_book_slug %}
+                        {% if next_book_slug == '' %}
+                        {% else %}
+                            <a class="btn btn-primary d-xl-flex align-items-xl-center" type="button"
+                               href="{% url 'book:detail-view' next_book_slug %}"
+                               style="margin-left: 5px;background: var(--bs-border-color-translucent);border-style: none;">
+                                Next
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
+                                     viewBox="0 0 16 16" class="bi bi-arrow-right">
+                                    <path fill-rule="evenodd"
+                                          d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"></path>
+                                </svg>
+                            </a>
+                        {% endif %}
+                        {% if book.seller == user.customer.seller %}
+                            <a href='{% url 'book:update-book' book.slug %}' class="btn btn-primary">Update</a>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col text-start">
+                    <h1><strong>{{ book.title }}</strong></h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col text-start d-flex d-md-flex d-lg-flex d-xl-flex align-items-center align-items-md-center align-items-lg-center align-items-xl-center">
+                <span style="margin-left: 0;margin-right: 0;"><span
+                        style="color: rgba(33, 37, 41, 0.76);">Author</span>:
+                    {% for author in book.author.all %}
+                        <a href="{% url "author:author-detail" author.id %}">
+                                {{ author.name }}
+                            </a>
+                    {% endfor %}
+                        
+                    </span>
+                    <div style="height: 20px;background: var(--bs-tertiary-color);width: 1px;margin-left: 10px;margin-right: 10px;"></div>
+                    <div class="d-xl-flex align-items-xl-center rate" style="margin-right: 0;">
+                        {% for i in '12345'|make_list %}
+                            {% if i|add:0 <= avg_rating %}
+                                <i style="color:yellow; font-size:26px" data-rating={{ i }}>
+                                    ★
+                                </i>
+                            {% else %}
+                                <!-- Empty star -->
+                                <i style="font-size:26px" data-rating={{ i }}>
+                                    ★
+                                </i>
+                            {% endif %}
+
+                        {% endfor %}
+                        &nbsp;({{ book.reviews.count }})
+
+                    </div>
+                    <div style="height: 20px;background: var(--bs-tertiary-color);width: 1px;margin-left: 10px;margin-right: 10px;"></div>
+                    <span><span style="color: rgba(33, 37, 41, 0.68);">SKU</span>: 8031111</span>
+
+
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col text-start d-flex d-md-flex d-lg-flex d-xl-flex align-items-center align-items-md-center align-items-lg-center align-items-xl-center">
+                    <p style="margin-right: 10px;font-size: 50px;"><strong><span
+                            style="color: rgb(204, 25, 14);">${{ book.price }}</span></strong></p>
+                    <p style="font-size: 25px;"><span
+                            style="text-decoration: line-through; color: rgba(33, 37, 41, 0.66);">${{ book.price|add:8 }}</span>
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col ">
+                    <div class="text-start ck ck-content">
+                        {{ book.description|safe }}
+                    </div>
+                </div>
+            </div>
+            <div class="row d-xl-flex align-items-xl-center mt-2">
+                <div class="col-lg-6 col-xl-3">
+                    <p style="text-align: left;"><strong>Hurry up! Sale ends in:</strong></p>
+                </div>
+                <div class="col-lg-12 col-xl-8">
+                    <div id="wrapper"
+                         style="margin: 0px;margin-top: -6px;margin-bottom: -6px;padding: 0px;background: var(--bs-body-bg);">
+                        <div class="container text-start" style="padding: 0px;">
+                            <div id="clockdiv">
+                                <div class="clock-wrapper"
+                                     style="background: var(--bs-border-color-translucent);padding-top: 0px;padding-bottom: 0px;padding-left: 7px;padding-right: 7px;">
+                                <span class="days"
+                                      style="background: transparent;color: var(--bs-red);font-weight: bold;font-size: 38px;"> </span>
+                                    <div class="smalltext">
+                                        <p style="padding-bottom: 0px;color: var(--bs-red);font-weight: bold;">
+                                            <strong>Days </strong></p>
+                                    </div>
+                                </div>
+                                <div style="background: var(--bs-border-color-translucent);padding-top: 0px;padding-bottom: 0px;padding-left: 7px;padding-right: 7px;"
+                                     class="clock-wrapper"><span class="hours"
+                                                                 style="background: transparent;font-size: 38px;color: var(--bs-red);font-weight: bold;"> </span>
+                                    <div class="smalltext">
+                                        <p style="font-weight: bold;color: var(--bs-red);">Hours </p>
+                                    </div>
+                                </div>
+                                <div style="background: var(--bs-border-color-translucent);padding-top: 0px;padding-bottom: 0px;padding-left: 7px;padding-right: 7px;"
+                                     class="clock-wrapper"><span class="minutes"
+                                                                 style="background: transparent;font-size: 38px;color: var(--bs-red);font-weight: bold;"> </span>
+                                    <div class="smalltext">
+                                        <p style="font-weight: bold;color: var(--bs-red);">Minutes </p>
+                                    </div>
+                                </div>
+                                <div style="background: var(--bs-border-color-translucent);padding-top: 0px;padding-bottom: 0px;padding-left: 7px;padding-right: 7px;"
+                                     class="clock-wrapper"><span class="seconds"
+                                                                 style="background: transparent;font-size: 38px;color: var(--bs-red);font-weight: bold;"> </span>
+                                    <div class="smalltext">
+                                        <p style="font-weight: bold;color: var(--bs-red);">Seconds </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="text-start" style="margin-top: 12px;"><span style="color: rgba(33, 37, 41, 0.74);">Available on backorder</span>
+            </p>
+            <hr>
+            <div class="row flex-column">
+                <div class="col">
+                    <div></div>
+                    <p class="text-start"><span style="color: rgba(33, 37, 41, 0.73);">Quantity</span></p>
+                </div>
+                <div class="col text-start d-xl-flex justify-content-xl-start">
+                    <form method="post" action="{% url 'cart:add_to_cart' %}">
+                        <input type="number" name="quantity" value="1" min="1" max="1000"
+                               style="width: 161px;margin-right: 10px;">
+                        <input type="number" hidden="hidden" value="{{ book.id }}" name="book_id">
+                        {% csrf_token %}
+                        <button class="btn btn-primary d-xl-flex align-items-xl-center mt-2" type="submit"
+                                style="margin-right: 10px;background: var(--bs-form-invalid-border-color);border-style: none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
+                                 viewBox="0 0 16 16" class="bi bi-cart-fill" style="margin-right: 5px;">
+                                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"></path>
+                            </svg>
+                            Add to cart
+                        </button>
+                    </form>
+                    <form action="{% url 'wishlist:add-to-wishlist' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{ book.slug }}" name="slug">
+                        <button class="btn btn-primary d-xl-flex align-items-xl-center" type="submit"
+                                style="background: var(--bs-form-invalid-border-color);border-style: none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
+                                 viewBox="0 0 16 16" class="bi bi-heart" style="margin-right: 5px;">
+                                <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"></path>
+                            </svg>
+                            Add to wishlist
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col" style="text-align: left;">
+                    <p style="margin-bottom: 5px;"><span style="color: rgba(33, 37, 41, 0.76);">Categories</span>:
+
+                        <span class="fst-italic">{{ book.genre.all|join:', ' }}</span>
+
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="container">
+        <div class="row d-xl-flex justify-content-xl-center">
+            <div class="col-xl-2">
+                <p><strong class="text-black-50">Description</strong></p>
+            </div>
+            <div class="col-xl-3">
+                <p><strong class="text-black-50">Additional information</strong></p>
+            </div>
+            <div class="col-xl-3">
+                <p><strong>Reviews ({{ book.reviews.count }})</strong></p>
+            </div>
+        </div>
+        {% include 'book/comments.html' with book=book %}
+    </div>
+
+    {% block link-scripts %}
+        <script src="{% static 'assets/css/bootstrap.min.css' %}"></script>
+        <script src="{% static 'assets/js/countdown-timer-countdown.js' %}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    {% endblock %}
+
+    <script>
+        document.querySelectorAll('.rate i').forEach(star => {
+            star.addEventListener('click', function () {
+                let rating = this.getAttribute('data-rating'); // get the rating from the clicked star
+                console.log(rating)
+                // send the rating to the server
+                fetch('{% url 'book:rating' book.slug %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({'rating': rating})
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        {#reload#}
+                        {#window.location.reload();#}
+                        console.log(data)
+                        location.reload()
+                    });
+            });
+        });
+    </script>
+
+{% endblock %}

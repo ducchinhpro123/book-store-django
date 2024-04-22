@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% load book_tags %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+    {#    {% include 'book/deals_of_the_week.html' %}#}
+    <pre>{{ debug }}</pre>
+    {% include 'thumbnail.html' %}
+    {% deals_of_the_week %}
+
+    {% include 'index/genre.html' %}
+    {% include 'book/trending_and_popular.html' %}
+{% endblock %}

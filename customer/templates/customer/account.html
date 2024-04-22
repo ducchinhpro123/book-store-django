@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    My Account
+{% endblock %}
+
+
+
+{% block content %}
+
+    <!-- for messages -->
+    <div class="container mt-2">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close btn-close" data-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="container mt-5">
+
+        <div class="row">
+            <div class="col-sm-3 col-md-2 col-lg-2 col-xl-2 text-start">
+                <hr/>
+                <a href="{% url 'index:index' %}">Dashboard</a>
+                <hr/>
+                <a href="{% url 'order:history_order' %}">Orders</a>
+                <hr/>
+                <a href="{% url 'customer:address' %}">Addresses</a>
+                <hr/>
+                <a href="{% url 'wishlist:my-wishlist' %}">Wishlist</a>
+                <hr/>
+                <a href="#">Logout</a>
+                <hr/>
+            </div>
+            <div class="col text-start">
+                <p>Hello <strong>{{ request.user.username }}</strong> (not <strong>{{ request.user.username }}</strong>?
+                    <a href="{% url 'authentication:logout' %}">Log out</a>)</p>
+                <p>From your account dashboard you can view your <a
+                        href="https://demo2.pavothemes.com/bookory/my-account/orders/">recent orders</a>, manage your <a
+                        href="https://demo2.pavothemes.com/bookory/my-account/edit-address/">shipping and billing
+                    addresses</a>, and <a href="https://demo2.pavothemes.com/bookory/my-account/edit-account/">edit your
+                    password and account details</a>.</p>
+                <p><strong>Become a Vendor</strong><br/>Vendors can sell products and manage a store with a vendor
+                    dashboard.</p>
+                {% if user.customer.img_profile %}
+                {% else %}
+                    <div>
+                        You haven't set your avatar image yet. You can change it.
+                        <form action="{% url 'customer:update_avatar' %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="file" name="avatar" id="avatar">
+                            <input type="submit" value="Upload" class="btn btn-primary btn-sm">
+                        </form>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

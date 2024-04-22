@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block title %}
+    Update Book Form
+{% endblock %}
+
+{% block content %}
+
+
+    <h1 class="text-black mt-5 text-center">Form to update a book</h1>
+    <hr>
+
+
+    <div class="container mt-5 text-start">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.media }}
+            {% for field in form %}
+                <div class="">
+                    <div><label for="{{ field.id_for_label }}" class="text-dark">{{ field.label }}: </label></div>
+                    {{ field }}
+                </div>
+                {% if field.errors %}
+                    <div class="alert alert-danger">
+                        {{ field.errors }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <input type="submit" class="btn btn-info mt-2" value="Update"/>
+        </form>
+    </div>
+
+    <hr>
+
+
+
+    <div class="container text-start">
+
+        <p>Struggling to find the right <span class="fw-bold">authors</span>? Look no further - <a
+                href="{% url 'author:create-author' %}">create
+            your
+            own here!</a></p>
+        <p>Struggling to find the right <span class="fw-bold">genres</span>? Look no further - <a
+                href="{% url 'book:create-genre' %}">create your own here!</a></p>
+        <p>Struggling to find the right <span class="fw-bold">publishers</span>? Look no further - <a
+                href="{% url 'book:create-publisher' %}">create
+            your own here!</a></p>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Create Author Form
+{% endblock %}
+
+
+{% block content %}
+
+
+    <h1 class="text-center mt-5 text-black">Create Author</h1>
+    <hr>
+    <div class="container  text-start">
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    <div><label for="{{ field.id_for_label }}" class="text-dark">{{ field.label }}: </label></div>
+                    {{ field }}
+                </div>
+            {% endfor %}
+            <input type="submit" class="btn btn-info mt-2" value="Create"/>
+        </form>
+    </div>
+
+
+{% endblock %}
+

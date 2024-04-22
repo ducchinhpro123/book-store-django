@@ -1,0 +1,10 @@
+{% load book_tags %}
+<section style="margin-top: 61px;">
+    <div class="container d-flex flex-column flex-sm-column flex-md-column flex-lg-row">
+
+        {% get_book_trending %}
+        {% get_book_popular %}
+{#        {% include 'book/trending.html' %}#}
+{#        {% include 'book/popular.html' %}#}
+    </div>
+</section>

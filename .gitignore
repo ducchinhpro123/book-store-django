@@ -1,0 +1,8 @@
+venv
+# Ignore pycache
+__pycache__
+.idea
+*.log
+
+bla.py
+node_modules/

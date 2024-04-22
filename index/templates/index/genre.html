@@ -1,0 +1,68 @@
+{% load static %}
+
+<section style="margin-top: 24px;">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <form class="d-xl-flex align-items-xl-end form-genres" data-bss-parallax-bg="true"
+                      action="{% url 'book:filter' %}"
+                      method="get" id="genres"
+                      style="height: 250px;background-image: url({% static 'assets/img/h8_cate1.jpg' %});background-position: center;background-size: cover;border-radius: 15px;">
+                    <button type="submit" class="align-items-xl-center btn"
+                            style="position: absolute;margin-left: 10px;"><strong>Fiction &amp;
+                        Fantasy&nbsp;</strong></button>
+                    <input type="hidden" name="genres" value="{{ 'Fiction' }}">
+                    <input type="hidden" name="genres" value="{{ 'Fantasy' }}">
+                </form>
+            </div>
+            <div class="col-xl-3">
+                <form method="get" action="{% url 'book:filter' %}" class="d-xl-flex align-items-xl-end"
+                      data-bss-parallax-bg="true"
+                      style="height: 250px;background-image: url({% static 'assets/img/h8_cate2.jpg' %});background-position: center;background-size: cover;border-radius: 15px;">
+                    <button type="submit" class="align-items-xl-center btn"
+                            style="position: absolute;margin-left: 10px;"><strong>Mystery &amp;
+                        Thriller&nbsp;</strong></button>
+                    <input type="hidden" name="genres" value="{{ 'Mystery' }}">
+                    <input type="hidden" name="genres" value="{{ 'Thriller' }}">
+                </form>
+            </div>
+            <div class="col-xl-4">
+                <form method="get" action="{% url 'book:filter' %}" class="d-xl-flex align-items-xl-end"
+                      data-bss-parallax-bg="true"
+                      style="height: 250px;background-image: url({% static 'assets/img/h8_cate3.jpg' %});background-position: center;background-size: cover;border-radius: 15px;">
+                    <p class="align-items-xl-center" style="position: absolute;margin-left: 10px;"><strong>Crime &amp;
+                        Novel&nbsp;</strong></p>
+                    <input type="hidden" name="genres" value="{{ 'Crime' }}">
+                    <input type="hidden" name="genres" value="{{ 'Novel' }}">
+                </form>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-xl-4">
+                <form method="get" action="{% url 'book:filter' %}" class="d-xl-flex align-items-xl-end"
+                      data-bss-parallax-bg="true"
+                      style="height: 250px;background-image: url({% static 'assets/img/h8_cate4.jpg' %});background-position: center;background-size: cover;border-radius: 15px;">
+                    <button type="submit" class="align-items-xl-center btn" style="position: absolute;margin-left: 10px;"><strong>Romance</strong></button>
+                    <input type="hidden" name="genres" value="{{ 'Romance' }}">
+                </form>
+            </div>
+            <div class="col-xl-4">
+                <form method="get" action="{% url 'book:filter' %}" class="d-xl-flex align-items-xl-end"
+                      data-bss-parallax-bg="true"
+                      style="height: 250px;background-image: url({% static 'assets/img/h8_cate5.jpg' %});background-position: center;background-size: cover;border-radius: 15px;">
+                    <button type="submit" class="align-items-xl-center btn" style="position: absolute;margin-left: 10px;"><strong>Adult&nbsp;</strong></button>
+                    <input type="hidden" name="genres" value="{{ 'Adult' }}">
+                </form>
+            </div>
+            <div class="col-xl-4">
+                <form method="get" action="{% url 'book:filter' %}" class="d-xl-flex align-items-xl-end"
+                      data-bss-parallax-bg="true"
+                      style="height: 250px;background-image: url({% static 'assets/img/h8_cate6.jpg' %});background-position: center;background-size: cover;border-radius: 15px;">
+                    <button type="submit" class="btn align-items-xl-center" style="position: absolute;margin-left: 10px;"><strong>Science Fiction&nbsp;</strong></button>
+                    <input type="hidden" name="genres" value="{{ 'Science Fiction' }}">
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+

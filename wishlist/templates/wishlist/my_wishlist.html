@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    My Wishlist
+{% endblock %}
+
+{% block content %}
+
+    <div class="container mt-5">
+        <h1 class="text-center text-black">Your wishlist ({{ wishlist_num }})</h1>
+        <hr>
+        {% for wl in wishlist %}
+
+            <div class="row">
+                <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1 d-md-flex d-lg-flex d-xl-flex align-items-center justify-content-md-end justify-content-lg-end align-items-lg-center justify-content-xl-center align-items-xl-center">
+                    <button type="button">
+                        <a href="{% url 'wishlist:remove-from-wishlist' wl.book.slug %}">
+                            <svg class="bi bi-x" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                 fill="currentColor"
+                                 viewBox="0 0 16 16">
+                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"></path>
+                            </svg>
+                        </a>
+                    </button>
+
+                </div>
+                <div class="col-3 col-sm-2 col-md-2 col-lg-2 col-xl-1 d-lg-flex align-items-center align-items-lg-center">
+                    <img class="img-thumbnail" src="{{ wl.book.image.url }}" alt="{{ wl.book.title }}"/>
+                </div>
+                <div class="col-8 col-sm-7 col-md-7 d-md-flex d-lg-flex d-xl-flex align-items-center align-items-md-center align-items-lg-center align-items-xl-center">
+                    <div class="text-start">
+                        <p><strong>{{ wl.book.title }}</strong></p>
+                        <p><span class="text-black-50"><span
+                                style="text-decoration: line-through;">$814.66</span></span><span>${{ wl.book.price }}</span>
+                        </p>
+                        <p class="text-black-50">{{ wl.date_added }}</p>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-3 text-center d-md-flex d-lg-flex d-xl-flex align-items-center align-items-md-center align-items-lg-center align-items-xl-center">
+                    <form action="{% url 'cart:add_to_cart' %}" method="post">
+                        {% csrf_token %}
+                        <input type="number" hidden="hidden" value="{{ wl.book.id }}" name="book_id">
+                        <input type="number" hidden="hidden" value='1' name='quantity'>
+                        <button class="btn btn-primary" type="submit" 
+                                style="background: var(--bs-form-invalid-color);border-style: none;">Add to cart
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+            <hr/>
+        {% endfor %}
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+    Register Seller Form
+{% endblock %}
+
+
+{% block content %}
+
+
+
+
+    <div class="container mt-5 text-start">
+    <h1 class="text-black mt-5 text-center">Register to become a seller</h1>
+    <hr>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.media }}
+            {% for field in form %}
+                <div class="">
+                    <div><label for="{{ field.id_for_label }}" class="text-dark">{{ field.label }}: </label></div>
+                    {{ field }}
+                </div>
+                {% if field.errors %}
+                    <div class="alert alert-danger">
+                        {{ field.errors }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <input type="submit" class="btn btn-info mt-2" value="Create"/>
+        </form>
+    </div>
+
+
+{% endblock %}

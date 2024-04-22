@@ -21,3 +21,6 @@ Please read the `book_shop.sql` carefully before running it. You need to change 
 ```bash
 pip install -r requirements.txt
 ```
+
+# Database tables
+![Database tables](./database_tables.png)
